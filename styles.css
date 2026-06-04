@@ -2,8 +2,8 @@
 :root {
   --ai2-dark: #0a2c27;          /* hero deep green */
   --ai2-dark-2: #0e3a33;        /* slightly lighter green */
-  --ai2-cream: #faf3ea;         /* body background */
-  --ai2-cream-2: #f4ead9;       /* figure backdrop */
+  --ai2-cream: #ffffff;         /* body background (white) */
+  --ai2-cream-2: #ffffff;       /* figure/clip backdrop */
   --ai2-text: #102f2a;          /* body text on cream */
   --ai2-text-soft: #3f5b54;     /* muted body text */
   --ai2-light: #f3efe6;         /* hero title text */
@@ -363,3 +363,79 @@ figure video {
 }
 
 /* tighten captioned method labels reused from blog already (.vid-method, .demo-label) */
+
+/* ===================== Gallery selector + white-bg polish ===================== */
+
+/* soft shadow so white-bg clips/figures read as cards on the white page */
+figure img,
+figure video,
+.crop,
+.gallery-stage .stage-single .crop {
+  box-shadow: 0 2px 14px rgba(16, 47, 42, 0.10);
+}
+
+/* left-crop wrapper: hides the jittering line on the left border of the clips */
+.crop {
+  overflow: hidden;
+  border-radius: 8px;
+  line-height: 0;
+}
+.crop video {
+  display: block;
+  width: 103%;
+  max-width: none;
+  margin-left: -3%;   /* push the left edge (with the jitter) out of the clip */
+  height: auto;
+  border-radius: 0;
+  box-shadow: none;
+  background: var(--ai2-cream-2);
+}
+
+/* gallery */
+.gallery {
+  width: min(980px, 94vw);
+  margin: 26px auto 0;
+}
+.gallery-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+.gallery-tab {
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ai2-text-soft);
+  background: #fff;
+  border: 1px solid rgba(16, 47, 42, 0.18);
+  border-radius: 999px;
+  padding: 7px 15px;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.gallery-tab:hover { color: var(--ai2-text); border-color: var(--ai2-text); }
+.gallery-tab.active {
+  background: var(--ai2-dark);
+  color: var(--ai2-light);
+  border-color: var(--ai2-dark);
+}
+
+.stage-prompt {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ai2-text);
+  margin: 0 auto 14px;
+}
+.gallery-stage .stage-single {
+  width: min(640px, 100%);
+  margin: 0 auto;
+}
+/* video-gen "ours" highlight now sits on the crop wrapper */
+.vid-col.best .crop { box-shadow: 0 0 0 3px var(--ai2-green); }
