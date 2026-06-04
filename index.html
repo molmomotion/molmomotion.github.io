@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
 
@@ -243,21 +243,21 @@
       "gallery-forecasting": {
         type: "single",
         items: [
-          { label: "Move and rotate wooden bowl with fruits on the table", src: "images/forecast_bowl.mp4" },
-          { label: "Roll a lint roller on a blue cloth", src: "images/forecast_lint.mp4" },
-          { label: "A silver car follows the road and slowly turns to the right", src: "images/forecast_car.mp4" },
-          { label: "A flamingo dips its beak into the water while walking to the right", src: "images/forecast_flamingo.mp4" },
-          { label: "Slide the black keyboard toward the person", src: "images/forecast_keyboard.mp4" },
-          { label: "Put yellow toy in blue bowl", src: "images/forecast_picknplace.mp4" }
+          { label: "Move and rotate wooden bowl with fruits on the table", src: "images/forecast_bowl.mp4", thumb: "images/thumbs/forecast_bowl.jpg" },
+          { label: "Roll a lint roller on a blue cloth", src: "images/forecast_lint.mp4", thumb: "images/thumbs/forecast_lint.jpg" },
+          { label: "A silver car follows the road and slowly turns to the right", src: "images/forecast_car.mp4", thumb: "images/thumbs/forecast_car.jpg" },
+          { label: "A flamingo dips its beak into the water while walking to the right", src: "images/forecast_flamingo.mp4", thumb: "images/thumbs/forecast_flamingo.jpg" },
+          { label: "Slide the black keyboard toward the person", src: "images/forecast_keyboard.mp4", thumb: "images/thumbs/forecast_keyboard.jpg" },
+          { label: "Put yellow toy in blue bowl", src: "images/forecast_picknplace.mp4", thumb: "images/thumbs/forecast_picknplace.jpg" }
         ]
       },
       "gallery-robotics": {
         type: "single",
         items: [
-          { label: "Take cloth out of container", src: "images/droid_towel.mp4" },
-          { label: "Move lid on pot", src: "images/droid_potlid.mp4" },
-          { label: "Hang the cloth", src: "images/droid_hangcloth.mp4" },
-          { label: "Move white object into container", src: "images/droid_picktoy.mp4" }
+          { label: "Take cloth out of container", src: "images/droid_towel.mp4", thumb: "images/thumbs/droid_towel.jpg" },
+          { label: "Move lid on pot", src: "images/droid_potlid.mp4", thumb: "images/thumbs/droid_potlid.jpg" },
+          { label: "Hang the cloth", src: "images/droid_hangcloth.mp4", thumb: "images/thumbs/droid_hangcloth.jpg" },
+          { label: "Move white object into container", src: "images/droid_picktoy.mp4", thumb: "images/thumbs/droid_picktoy.jpg" }
         ]
       },
       "gallery-videogen": {
@@ -268,11 +268,11 @@
           { key: "wan14b", title: "WAN-14B" }
         ],
         items: [
-          { label: "A flamingo dips its beak into the water while walking to the right", das: "images/vg_flamingo_das.mp4", cogvideo: "images/vg_flamingo_cogvideo.mp4", wan14b: "images/vg_flamingo_wan14b.mp4" },
-          { label: "Take the round light brown plate from the table", das: "images/vg_plate_das.mp4", cogvideo: "images/vg_plate_cogvideo.mp4", wan14b: "images/vg_plate_wan14b.mp4" },
-          { label: "Little pigs walk to the big pig", das: "images/vg_pigs_das.mp4", cogvideo: "images/vg_pigs_cogvideo.mp4", wan14b: "images/vg_pigs_wan14b.mp4" },
-          { label: "Pick up the red spatula from the plate", das: "images/vg_spatula_das.mp4", cogvideo: "images/vg_spatula_cogvideo.mp4", wan14b: "images/vg_spatula_wan14b.mp4" },
-          { label: "A person rides an escalator up to the second floor", das: "images/vg_escalator_das.mp4", cogvideo: "images/vg_escalator_cogvideo.mp4", wan14b: "images/vg_escalator_wan14b.mp4" }
+          { label: "A flamingo dips its beak into the water while walking to the right", thumb: "images/thumbs/vg_flamingo_das.jpg", das: "images/vg_flamingo_das.mp4", cogvideo: "images/vg_flamingo_cogvideo.mp4", wan14b: "images/vg_flamingo_wan14b.mp4" },
+          { label: "Take the round light brown plate from the table", thumb: "images/thumbs/vg_plate_das.jpg", das: "images/vg_plate_das.mp4", cogvideo: "images/vg_plate_cogvideo.mp4", wan14b: "images/vg_plate_wan14b.mp4" },
+          { label: "Little pigs walk to the big pig", thumb: "images/thumbs/vg_pigs_das.jpg", das: "images/vg_pigs_das.mp4", cogvideo: "images/vg_pigs_cogvideo.mp4", wan14b: "images/vg_pigs_wan14b.mp4" },
+          { label: "Pick up the red spatula from the plate", thumb: "images/thumbs/vg_spatula_das.jpg", das: "images/vg_spatula_das.mp4", cogvideo: "images/vg_spatula_cogvideo.mp4", wan14b: "images/vg_spatula_wan14b.mp4" },
+          { label: "A person rides an escalator up to the second floor", thumb: "images/thumbs/vg_escalator_das.jpg", das: "images/vg_escalator_das.mp4", cogvideo: "images/vg_escalator_cogvideo.mp4", wan14b: "images/vg_escalator_wan14b.mp4" }
         ]
       }
     };
@@ -311,8 +311,9 @@
         const b = document.createElement("button");
         b.className = "gallery-tab";
         b.type = "button";
-        b.textContent = it.label;
         b.title = it.label;
+        b.setAttribute("aria-label", it.label);
+        b.innerHTML = '<img src="' + it.thumb + '" alt="" loading="lazy">';
         b.addEventListener("click", () => show(i));
         tabs.appendChild(b);
       });

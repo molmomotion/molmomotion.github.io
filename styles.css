@@ -390,35 +390,32 @@ figure video {
   margin-left: 50%;
   transform: translateX(-50%);
 }
+/* thumbnail selector strip (edit-by-track style) */
 .gallery-tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px;
   justify-content: center;
+  align-items: center;
   margin-bottom: 26px;
 }
 .gallery-tab {
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--ai2-text);
-  background: transparent;
-  border: 1.5px solid rgba(16, 47, 42, 0.22);
-  border-radius: 7px;
-  padding: 8px 16px;
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  padding: 5px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  line-height: 0;
+  transition: transform 0.15s ease, background 0.15s ease;
 }
-.gallery-tab:hover { border-color: var(--ai2-text); background: rgba(16, 47, 42, 0.05); }
-.gallery-tab.active {
-  background: var(--ai2-dark);
-  color: var(--ai2-light);
-  border-color: var(--ai2-dark);
+.gallery-tab img {
+  display: block;
+  width: 76px;
+  height: auto;
+  border-radius: 5px;
 }
+.gallery-tab:hover { transform: scale(1.1); }
+.gallery-tab.active { background: rgba(26, 160, 107, 0.28); }
 
 .stage-prompt {
   text-align: center;
