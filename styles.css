@@ -298,3 +298,68 @@ figcaption {
   .gif-row { flex-direction: column; }
   .gif-row img { width: 100%; }
 }
+
+/* ===================== Project-page additions ===================== */
+
+/* make <video> behave like the <img> figures/clips */
+figure video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.gif-row video,
+.vid-col video {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: var(--ai2-cream-2);
+}
+.vid-col.best video { box-shadow: 0 0 0 3px var(--ai2-green); }
+
+/* sticky quick-links nav */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10, 44, 39, 0.96);
+  backdrop-filter: saturate(140%) blur(6px);
+  border-bottom: 1px solid rgba(243, 239, 230, 0.12);
+}
+.nav-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.nav-inner a {
+  color: var(--ai2-light-soft);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: color 0.15s ease;
+}
+.nav-inner a:hover { color: var(--ai2-light); }
+
+/* anchor offset so sticky nav doesn't cover headings */
+.article h2[id], .article h3[id], section[id] { scroll-margin-top: 70px; }
+
+/* BibTeX block */
+.bibtex {
+  background: var(--ai2-dark);
+  color: #cdddd7;
+  border-radius: 10px;
+  padding: 20px 22px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: pre;
+}
+
+/* tighten captioned method labels reused from blog already (.vid-method, .demo-label) */
