@@ -64,157 +64,82 @@
         <source src="images/teaser.mp4" type="video/mp4" />
       </video>
       <figcaption>
-        <strong>Overview.</strong> Given initial 3D query points on an object, a short
-        history of RGB observations, and a language description of the future action,
-        MolmoMotion predicts the future 3D positions of all queried points in a metric world
-        coordinate frame. The learned motion prior transfers to downstream applications
-        including robotics planning and video generation.
+        Given 3D query points on an object, a short RGB history, and a language instruction,
+        MolmoMotion predicts each point's future 3D trajectory in a metric world frame.
       </figcaption>
     </figure>
 
     <!-- ===================== 3D FORECASTING ===================== -->
     <h2 id="forecasting">3D Motion Forecasting</h2>
     <p>
-      MolmoMotion forecasts diverse 3D motion types across objects, scenes, and action
-      descriptions. The predicted tracks follow the language instruction and remain close to
-      ground truth across both manipulation and outdoor dynamic scenes. Select an example to
-      view its prediction.
+      MolmoMotion forecasts an object's future 3D motion from a language instruction, across
+      diverse objects and scenes. Select an example.
     </p>
     <div class="gallery" id="gallery-forecasting"></div>
 
-    <p style="margin-top:48px;">
-      On PointMotionBench, MolmoMotion outperforms prior methods by a large margin, beating
-      pixel-space video generators, parametric 3D methods, and constant-velocity
-      extrapolation. The autoregressive variant achieves the strongest overall performance.
-      Notably, simple non-parametric baselines are competitive with several learned
-      baselines, suggesting that visually plausible RGB futures do not necessarily recover
-      accurate metric point motion.
-    </p>
-    <figure class="full">
+    <figure class="full" style="margin-top:56px;">
       <img src="images/results_forecasting.png" alt="3D motion forecasting results on PointMotionBench" />
     </figure>
 
     <!-- ===================== ROBOTICS ===================== -->
     <h2 id="robotics">Downstream: Robotics Planning</h2>
     <p>
-      A useful motion prior should transfer across embodiments: a cup lifted by a human hand
-      and by a robot gripper involve very different actions, but the object can follow a
-      similar 3D path. After fine-tuning on DROID, MolmoMotion predicts coherent object
-      trajectories in real robot videos across different objects, viewpoints, scenes, and
-      manipulation tasks.
+      The 3D motion prior transfers across embodiments. After fine-tuning on DROID,
+      MolmoMotion predicts coherent object trajectories on real robots.
     </p>
     <div class="gallery" id="gallery-robotics"></div>
 
-    <p style="margin-top:48px;">
-      The learned prior improves sample efficiency, closed-loop success, and generalization
-      to unseen objects and scenes. On the MolmoSpaces pick-and-place task, a policy
-      initialized from MolmoMotion reached <strong>76.3%</strong> success versus
-      <strong>56.0%</strong> for a Molmo 2 baseline, and learned faster (51% at 10K steps vs
-      19%). On real robots, MolmoMotion fine-tuned on DROID reached the baseline's 12K-step
-      error in roughly 2K steps.
-    </p>
-    <figure class="full">
+    <figure class="full" style="margin-top:56px;">
       <img src="images/results_robotics.png" alt="Robotics planning results" />
     </figure>
 
     <!-- ===================== VIDEO GENERATION ===================== -->
     <h2 id="videogen">Downstream: Video Generation</h2>
     <p>
-      MolmoMotion's predicted 3D trajectories provide accurate motion guidance for video
-      generation. We supply explicit future object trajectories as a motion-control signal
-      for image-to-video models. The 3D tracks help generated videos follow the requested
-      action more precisely, especially for fine-grained object interactions where text
-      alone is ambiguous. Select a prompt to compare methods.
+      MolmoMotion's predicted 3D trajectories guide image-to-video models to follow the
+      requested action more faithfully. Select a prompt to compare methods.
     </p>
     <div class="gallery" id="gallery-videogen"></div>
 
-    <p style="margin-top:48px;">
-      When its predicted trajectories condition a lightweight 3D-track-conditioned
-      image-to-video model, MolmoMotion improves video quality over the base model across
-      all five motion-related metrics, and outperforms a much larger image-to-video model on
-      four of the five.
-    </p>
-    <figure class="full">
+    <figure class="full" style="margin-top:56px;">
       <img src="images/results_videogen.png" alt="Video generation metrics" />
     </figure>
 
     <!-- ===================== METHOD ===================== -->
     <h2 id="method">The MolmoMotion Model</h2>
     <p>
-      MolmoMotion uses the pretrained 4B Molmo 2 as its vision-language backbone, connecting
-      language instructions to objects and points in the image. Given a short video history,
-      an action description, and a set of query points with their initial 3D positions, the
-      model builds a shared understanding of the referred object, the query points, and the
-      described motion, then predicts the future 3D trajectory of each point. We train two
-      complementary variants:
+      MolmoMotion uses Molmo 2 as its vision-language backbone and predicts each query point's
+      future 3D trajectory in two variants: an autoregressive model
+      (<strong>MolmoMotion-AR</strong>) that decodes coordinates as text, and a flow-matching
+      model (<strong>MolmoMotion-FM</strong>) that generates trajectories in continuous 3D
+      space.
     </p>
-    <ul>
-      <li>
-        The <strong>autoregressive variant (MolmoMotion-AR)</strong> predicts future
-        coordinates step by step as structured text, in temporal order. Conditioning each
-        new coordinate on the trajectory generated so far encourages smooth rollouts and
-        gives the strongest accuracy when the future path is well-defined.
-      </li>
-      <li>
-        The <strong>flow-matching variant (MolmoMotion-FM)</strong> predicts trajectories in
-        continuous 3D space by transforming noise into motion, making it better suited to
-        representing uncertainty when an instruction admits multiple plausible futures.
-      </li>
-    </ul>
     <figure class="full">
       <img src="images/model_arc.png" alt="MolmoMotion architecture" />
-      <figcaption>
-        The MolmoMotion architecture. The shared input to the Molmo 2 backbone consists of
-        image tokens, action-description text tokens, and 2D query-point feature tokens
-        sampled from the vision encoder. The autoregressive variant decodes future
-        trajectories as quantized coordinate text; the flow-matching variant represents them
-        directly in continuous 3D coordinate space.
-      </figcaption>
     </figure>
 
     <!-- ===================== DATA & BENCHMARK ===================== -->
     <h2 id="data">MolmoMotion-1M and PointMotionBench</h2>
     <p>
-      To train MolmoMotion, we need data that does not yet exist: large-scale videos with 3D
-      point trajectories grounded to specific objects and paired with action descriptions.
-      Existing 3D-track datasets are small and domain-limited, and internet videos provide
-      scale and diversity but lack 3D annotations. We therefore built an automatic pipeline
-      that extracts object-grounded 3D trajectories in metric world coordinates from
-      unconstrained video. It yields <strong>MolmoMotion-1M</strong>, the largest corpus of
-      action-described, object-grounded 3D point trajectories assembled to date, spanning
-      736 motion types and 5,692 distinct objects from 1.16M video clips.
+      An automatic annotation pipeline extracts object-grounded 3D point trajectories from
+      unconstrained video, yielding <strong>MolmoMotion-1M</strong> — the largest such corpus
+      to date, spanning 736 motion types and 5,692 objects from 1.16M clips.
     </p>
     <figure class="full">
       <video autoplay loop muted playsinline poster="images/pipeline.png">
         <source src="images/pipeline.mp4" type="video/mp4" />
       </video>
-      <figcaption>
-        The data annotation pipeline. Given a video and its action description, we ground the
-        moving object and sample query points, track dense 2D points, lift them into a shared
-        metric 3D frame, filter unreliable trajectories with object-level spatial and
-        temporal consistency priors, and clip the video to the window of meaningful motion.
-      </figcaption>
     </figure>
     <p>
-      To evaluate motion forecasting, we built <strong>PointMotionBench</strong>, a
-      human-verified benchmark of held-out 3D trajectories covering 2,720 clips across 111
-      object categories and 61 motion types, including indoor manipulation, egocentric
-      hand-object interaction, and outdoor dynamic scenes. For each clip, models receive the
-      current observation, object query points, and an action description, and are evaluated
-      on how accurately their predicted 3D point trajectories match the object's actual
-      future motion.
+      <strong>PointMotionBench</strong> is a human-verified benchmark of 2,720 held-out clips
+      across 111 object categories and 61 motion types.
     </p>
 
     <!-- ===================== LIMITATIONS ===================== -->
     <h2>Limitations</h2>
     <p>
-      MolmoMotion requires multiple forward passes to predict dense point tracks on an
-      object, since pretraining uses only 8 query points per example due to the Molmo 2
-      context-length limit. This sparse-point setting is not sufficient to densely represent
-      object geometry, limiting the model's understanding of fine-grained structure and
-      complex deformable motion. In addition, more downstream evaluations, such as
-      closed-loop real-world robot experiments, are needed to fully establish the
-      effectiveness of this motion-pretraining task.
+      MolmoMotion uses only 8 query points per object, which limits dense geometry and complex
+      deformable motion; broader real-world and closed-loop evaluation remains future work.
     </p>
 
     <!-- ===================== BIBTEX ===================== -->
