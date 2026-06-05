@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=14" />
 </head>
 <body>
 
@@ -76,10 +76,11 @@
     </figure>
 
     <!-- ===================== 3D FORECASTING ===================== -->
-    <h2 id="forecasting">3D Motion Forecasting</h2>
+    <h2 id="forecasting">I. 3D Motion Forecasting</h2>
     <p>
-      MolmoMotion forecasts an object's future 3D motion from a language instruction, across
-      diverse objects and scenes. Select an example.
+      Given a visual history, query points on an object, and a language instruction,
+      MolmoMotion predicts the future 3D trajectory of each point, capturing rigid,
+      articulated, and deformable motion across indoor, egocentric, and outdoor scenes.
     </p>
     <div class="gallery" id="gallery-forecasting"></div>
 
@@ -93,10 +94,12 @@
     </figure>
 
     <!-- ===================== ROBOTICS ===================== -->
-    <h2 id="robotics">Downstream: Robotics Planning</h2>
+    <h2 id="robotics">II. Robotics Planning</h2>
     <p>
-      The 3D motion prior transfers across embodiments. After fine-tuning on DROID,
-      MolmoMotion predicts coherent object trajectories on real robots.
+      Object motion in 3D is largely embodiment-agnostic, so the prior learned from human
+      video transfers to robots. Fine-tuned on real-robot videos from DROID, MolmoMotion
+      forecasts coherent object trajectories, and initializing a manipulation policy from it
+      improves downstream pick-and-place.
     </p>
     <div class="gallery" id="gallery-robotics"></div>
 
@@ -110,10 +113,11 @@
     </figure>
 
     <!-- ===================== VIDEO GENERATION ===================== -->
-    <h2 id="videogen">Downstream: Video Generation</h2>
+    <h2 id="videogen">III. Video Generation</h2>
     <p>
-      MolmoMotion's predicted 3D trajectories guide image-to-video models to follow the
-      requested action more faithfully. Select a prompt to compare methods.
+      MolmoMotion's predicted 3D trajectories act as an explicit motion-control signal for
+      image-to-video generation. Conditioning on them makes the generated motion follow the
+      instruction more faithfully than text alone.
     </p>
     <div class="gallery" id="gallery-videogen"></div>
 
@@ -127,31 +131,31 @@
     </figure>
 
     <!-- ===================== METHOD ===================== -->
-    <h2 id="method">The MolmoMotion Model</h2>
+    <h2 id="method">Our MolmoMotion Framework</h2>
     <p>
-      MolmoMotion uses Molmo 2 as its vision-language backbone and predicts each query point's
-      future 3D trajectory in two variants: an autoregressive model
-      (<strong>MolmoMotion-AR</strong>) that decodes coordinates as text, and a flow-matching
-      model (<strong>MolmoMotion-FM</strong>) that generates trajectories in continuous 3D
-      space.
+      MolmoMotion builds on the Molmo 2 vision-language backbone, which grounds the language
+      instruction to objects and points in the image. From image tokens, the action
+      description, and 2D query-point features, it decodes each point's future 3D trajectory in
+      two variants: an autoregressive model (<strong>MolmoMotion-AR</strong>) that emits
+      coordinates as quantized text, and a flow-matching model
+      (<strong>MolmoMotion-FM</strong>) that generates continuous trajectories from noise.
     </p>
     <figure class="full">
       <img src="images/model_arc.png" alt="MolmoMotion architecture" />
     </figure>
 
     <!-- ===================== DATA & BENCHMARK ===================== -->
-    <h2 id="data">Introducing MolmoMotion-1M and PointMotionBench</h2>
+    <h2 id="data">Training Data</h2>
     <p>
-      Training MolmoMotion needed data that didn't exist: large-scale video with
-      object-grounded 3D point trajectories paired with action descriptions. Existing 3D-track
-      datasets are small and domain-limited, and internet video has the scale but no 3D
-      annotations, so we built an automatic pipeline that extracts object-grounded 3D
-      trajectories from unconstrained video.
+      MolmoMotion-1M supplies the supervision this task requires: large-scale video paired with
+      object-grounded 3D point trajectories and action descriptions. Because no existing dataset
+      offers this combination, we generate it with an automatic pipeline that extracts
+      object-grounded 3D trajectories from unconstrained video.
     </p>
     <p>
-      The pipeline lifts dense 2D tracks into a shared metric 3D frame, drops points that don't
-      move coherently with the object, smooths the rest, and clips each video to the window of
-      real motion. At scale it yields <strong>MolmoMotion-1M</strong>, to our knowledge the
+      The pipeline lifts dense 2D tracks into a shared metric 3D frame, removes points that do
+      not move coherently with the object, smooths the rest, and clips each video to the window
+      of real motion. At scale it yields <strong>MolmoMotion-1M</strong>, to our knowledge the
       largest corpus of action-described, object-grounded 3D point trajectories to date,
       spanning 736 motion types and 5.6K distinct objects.
     </p>
@@ -173,14 +177,14 @@
         clip the video to intervals of meaningful motion.
       </figcaption>
     </figure>
+    <h2 id="benchmark">PointMotionBench</h2>
     <p>
-      To evaluate forecasting, we built <strong>PointMotionBench</strong>, a human-validated
-      benchmark of 2.7K held-out 3D trajectories across 111 object categories and 61 motion
-      types: indoor manipulation, egocentric hand-object interaction, and outdoor dynamic
-      scenes. Each method receives the current observation, query points, and an action
-      description, and is scored on how closely its predicted 3D trajectories match the
-      object's true future motion, a direct quantitative test rather than whether a track
-      merely looks plausible.
+      PointMotionBench measures 3D motion-forecasting accuracy on held-out data. It comprises
+      2.7K human-validated clips across 111 object categories and 61 motion types, spanning
+      indoor manipulation, egocentric hand-object interaction, and outdoor dynamic scenes. Each
+      method receives the current observation, query points, and an action description, and is
+      scored on how closely its predicted 3D trajectories match the object's true future
+      motion, a direct quantitative test rather than whether a track merely looks plausible.
     </p>
 
     <!-- ===================== LIMITATIONS ===================== -->
