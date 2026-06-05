@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MolmoMotion — Forecasting Point Trajectories in 3D with Language Instruction</title>
+  <title>MolmoMotion: Forecasting Point Trajectories in 3D with Language Instruction</title>
   <meta name="description" content="MolmoMotion: goal-conditioned 3D point motion forecasting. Given a visual history, 3D query points, and a language instruction, it predicts future 3D point trajectories in a world frame." />
 
   <!-- Manrope -->
@@ -85,6 +85,11 @@
 
     <figure class="full" style="margin-top:56px;">
       <img src="images/results_forecasting.png" alt="3D motion forecasting results on PointMotionBench" />
+      <figcaption>
+        On PointMotionBench, MolmoMotion beats pixel-space video generators, parametric-3D
+        methods, and constant-velocity extrapolation. Bars show 3D average displacement error
+        in meters; lower is better.
+      </figcaption>
     </figure>
 
     <!-- ===================== ROBOTICS ===================== -->
@@ -97,6 +102,11 @@
 
     <figure class="full" style="margin-top:56px;">
       <img src="images/results_robotics.png" alt="Robotics planning results" />
+      <figcaption>
+        A pick-and-place policy initialized from MolmoMotion reaches higher task success and
+        learns faster than a Molmo 2 baseline (76.3% vs 56.0% on MolmoSpaces); higher is
+        better.
+      </figcaption>
     </figure>
 
     <!-- ===================== VIDEO GENERATION ===================== -->
@@ -109,6 +119,11 @@
 
     <figure class="full" style="margin-top:56px;">
       <img src="images/results_videogen.png" alt="Video generation metrics" />
+      <figcaption>
+        MolmoMotion-guided generation (DaS + MolmoMotion) improves all five motion-related
+        metrics over the base model and beats a much larger image-to-video model on four of
+        five; higher is better.
+      </figcaption>
     </figure>
 
     <!-- ===================== METHOD ===================== -->
@@ -125,20 +140,40 @@
     </figure>
 
     <!-- ===================== DATA & BENCHMARK ===================== -->
-    <h2 id="data">MolmoMotion-1M and PointMotionBench</h2>
+    <h2 id="data">Introducing MolmoMotion-1M and PointMotionBench</h2>
     <p>
-      An automatic annotation pipeline extracts object-grounded 3D point trajectories from
-      unconstrained video, yielding <strong>MolmoMotion-1M</strong> — the largest such corpus
-      to date, spanning 736 motion types and 5,692 objects from 1.16M clips.
+      Training MolmoMotion needed data that didn't exist: large-scale video with
+      object-grounded 3D point trajectories paired with action descriptions. Existing 3D-track
+      datasets are small and domain-limited, and internet video has the scale but no 3D
+      annotations, so we built an automatic pipeline that extracts object-grounded 3D
+      trajectories from unconstrained video.
+    </p>
+    <p>
+      The pipeline lifts dense 2D tracks into a shared metric 3D frame, drops points that don't
+      move coherently with the object, smooths the rest, and clips each video to the window of
+      real motion. At scale it yields <strong>MolmoMotion-1M</strong>, to our knowledge the
+      largest corpus of action-described, object-grounded 3D point trajectories to date,
+      spanning 736 motion types and 5.6K distinct objects.
     </p>
     <figure class="full">
       <video autoplay loop muted playsinline poster="images/pipeline.png">
         <source src="images/pipeline.mp4" type="video/mp4" />
       </video>
+      <figcaption>
+        Overview of the data annotation pipeline. We ground the moving object and sample query
+        points, track dense 2D points, lift them into a shared metric 3D frame, filter
+        unreliable trajectories with object-level spatial and temporal consistency priors, and
+        clip the video to intervals of meaningful motion.
+      </figcaption>
     </figure>
     <p>
-      <strong>PointMotionBench</strong> is a human-verified benchmark of 2,720 held-out clips
-      across 111 object categories and 61 motion types.
+      To evaluate forecasting, we built <strong>PointMotionBench</strong>, a human-validated
+      benchmark of 2.7K held-out 3D trajectories across 111 object categories and 61 motion
+      types: indoor manipulation, egocentric hand-object interaction, and outdoor dynamic
+      scenes. Each method receives the current observation, query points, and an action
+      description, and is scored on how closely its predicted 3D trajectories match the
+      object's true future motion, a direct quantitative test rather than whether a track
+      merely looks plausible.
     </p>
 
     <!-- ===================== LIMITATIONS ===================== -->
