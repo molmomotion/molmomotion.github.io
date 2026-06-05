@@ -155,6 +155,13 @@
       largest corpus of action-described, object-grounded 3D point trajectories to date,
       spanning 736 motion types and 5.6K distinct objects.
     </p>
+
+    <div class="gallery" id="gallery-trainingdata"></div>
+    <figcaption style="margin-top:-8px;">
+      Example MolmoMotion-1M training samples: object-grounded 3D point trajectories extracted
+      from unconstrained video by our pipeline.
+    </figcaption>
+
     <figure class="full">
       <video autoplay loop muted playsinline poster="images/pipeline.png">
         <source src="images/pipeline.mp4" type="video/mp4" />
@@ -218,6 +225,13 @@
           { label: "A flamingo dips its beak into the water while walking to the right", src: "images/forecast_flamingo.mp4", thumb: "images/thumbs/forecast_flamingo.jpg" },
           { label: "Slide the black keyboard toward the person", src: "images/forecast_keyboard.mp4", thumb: "images/thumbs/forecast_keyboard.jpg" },
           { label: "Put yellow toy in blue bowl", src: "images/forecast_picknplace.mp4", thumb: "images/thumbs/forecast_picknplace.jpg" }
+        ]
+      },
+      "gallery-trainingdata": {
+        type: "single",
+        items: [
+          { label: "A camel walks to the right and then walks back", src: "images/gt_camel.mp4", thumb: "images/thumbs/gt_camel.jpg" },
+          { label: "Pour liquid from silver water bottle into brown cup", src: "images/gt_bottle.mp4", thumb: "images/thumbs/gt_bottle.jpg" }
         ]
       },
       "gallery-robotics": {
