@@ -179,7 +179,7 @@
         items: [
           { label: "Move and rotate wooden bowl with fruits on the table", src: "images/forecast_bowl.mp4", thumb: "images/thumbs/forecast_bowl.jpg" },
           { label: "Roll a lint roller on a blue cloth", src: "images/forecast_lint.mp4", thumb: "images/thumbs/forecast_lint.jpg" },
-          { label: "A silver car follows the road and slowly turns to the right", src: "images/forecast_car.mp4", thumb: "images/thumbs/forecast_car.jpg" },
+          { label: "A silver car follows the road and slowly turns to the right", src: "images/forecast_car.mp4", thumb: "images/thumbs/forecast_car.jpg", zoom: 1.8 },
           { label: "A flamingo dips its beak into the water while walking to the right", src: "images/forecast_flamingo.mp4", thumb: "images/thumbs/forecast_flamingo.jpg" },
           { label: "Slide the black keyboard toward the person", src: "images/forecast_keyboard.mp4", thumb: "images/thumbs/forecast_keyboard.jpg" },
           { label: "Put yellow toy in blue bowl", src: "images/forecast_picknplace.mp4", thumb: "images/thumbs/forecast_picknplace.jpg" }
@@ -211,8 +211,9 @@
       }
     };
 
-    function vid(src) {
-      return '<div class="crop"><video autoplay loop muted playsinline src="' + src + '"></video></div>';
+    function vid(src, zoom) {
+      var st = zoom ? ' style="transform:scale(' + zoom + ');transform-origin:center"' : '';
+      return '<div class="crop"><video autoplay loop muted playsinline src="' + src + '"' + st + '></video></div>';
     }
 
     function buildGallery(id) {
@@ -230,7 +231,7 @@
         const item = cfg.items[i];
         let html = '<p class="stage-prompt">&ldquo;' + item.label + '&rdquo;</p>';
         if (cfg.type === "single") {
-          html += '<div class="stage-single">' + vid(item.src) + "</div>";
+          html += '<div class="stage-single">' + vid(item.src, item.zoom) + "</div>";
         } else {
           html += '<div class="vid-compare">' + cfg.methods.map(m =>
             '<figure class="vid-col' + (m.best ? " best" : "") + '">' +
